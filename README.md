@@ -62,6 +62,30 @@ c1ccccc1,"[-0.089, 0.156, ...]"
 - **RDKit Integration**: Molecular featurization
 
 
+## Hugging Face Hub
+
+This model is available on Hugging Face Hub: [Nikolenko-Sergei/FukuiNet](https://huggingface.co/Nikolenko-Sergei/FukuiNet)
+
+### Using from Hugging Face
+
+```bash
+# Clone from Hugging Face
+git clone https://huggingface.co/Nikolenko-Sergei/FukuiNet
+cd FukuiNet
+
+# Install and run
+uv sync
+uv run fukui_net predict "CCO"
+```
+
+### Uploading Updates
+
+To upload new versions to Hugging Face:
+
+1. Get your token from https://huggingface.co/settings/tokens
+2. Set environment variable: `export HUGGINGFACE_HUB_TOKEN='your_token'`
+3. Run upload script: `uv run python upload_to_hf.py`
+
 ## License
 
 MIT License
