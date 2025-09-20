@@ -4,9 +4,8 @@ Hugging Face Transformers integration for FukuiNet
 This module provides Hugging Face compatible classes for FukuiNet model.
 """
 
-import json
 import os
-from typing import Any, Dict, List, Optional, Union
+from typing import Any
 
 import torch
 from transformers import PretrainedConfig, PreTrainedModel
@@ -20,12 +19,12 @@ logger = logging.get_logger(__name__)
 class FukuiNetConfig(PretrainedConfig):
     """
     Configuration class for FukuiNet model.
-    
+
     This class holds the configuration for FukuiNet model parameters.
     """
-    
+
     model_type = "fukui_net"
-    
+
     def __init__(
         self,
         atom_in_features: int = 133,
@@ -52,18 +51,18 @@ class FukuiNetConfig(PretrainedConfig):
 class FukuiNetForMolecularProperty(PreTrainedModel):
     """
     Hugging Face compatible wrapper for FukuiNet model.
-    
+
     This class wraps the FukuiNet predictor to make it compatible with
     Hugging Face Transformers AutoModel interface.
     """
-    
+
     config_class = FukuiNetConfig
-    
+
     def __init__(self, config: FukuiNetConfig):
         super().__init__(config)
         self.config = config
         self.predictor = None
-    
+
     @classmethod
     def from_pretrained(cls, pretrained_model_name_or_path, *model_args, **kwargs):
         """Override from_pretrained to handle our custom checkpoint format."""
@@ -71,70 +70,69 @@ class FukuiNetForMolecularProperty(PreTrainedModel):
         config = kwargs.pop("config", None)
         if config is None:
             config = FukuiNetConfig.from_pretrained(pretrained_model_name_or_path, **kwargs)
-        
+
         # Create model instance
         model = cls(config)
-        
+
         # Load our custom checkpoint
-        import os
         checkpoint_path = os.path.join(pretrained_model_name_or_path, "models/final_model.ckpt")
         if not os.path.exists(checkpoint_path):
             checkpoint_path = "models/final_model.ckpt"  # fallback
-        
+
         if os.path.exists(checkpoint_path):
             device = kwargs.get("device", "auto")
             model.from_pretrained_checkpoint(checkpoint_path, device=device)
-        
+
         return model
-        
+
     def from_pretrained_checkpoint(self, checkpoint_path: str, device: str = "auto"):
         """
         Load model from FukuiNet checkpoint.
-        
+
         Args:
             checkpoint_path: Path to the model checkpoint file
             device: Device to run inference on ('cpu', 'cuda', 'cuda:1', etc.)
         """
         self.predictor = FukuiNetPredictor(checkpoint_path, device)
         return self
-        
-    def predict(self, smiles: Union[str, List[str]]) -> Union[List[float], List[List[float]]]:
+
+    def predict(self, smiles: str | list[str]) -> list[float] | list[list[float]]:
         """
         Predict Fukui indices for SMILES.
-        
+
         Args:
             smiles: SMILES string or list of SMILES strings
-            
+
         Returns:
             Fukui indices as list of floats or list of lists
         """
         if self.predictor is None:
             raise ValueError("Model not loaded. Use from_pretrained_checkpoint() first.")
-            
+
         if isinstance(smiles, str):
             return self.predictor.predict_smiles(smiles)
         else:
             return [self.predictor.predict_smiles(s) for s in smiles]
-    
-    def predict_batch(self, smiles_list: List[str]) -> List[List[float]]:
+
+    def predict_batch(self, smiles_list: list[str]) -> list[list[float]]:
         """
         Predict Fukui indices for a batch of SMILES.
-        
+
         Args:
             smiles_list: List of SMILES strings
-            
+
         Returns:
             List of Fukui indices for each molecule
         """
         if self.predictor is None:
             raise ValueError("Model not loaded. Use from_pretrained_checkpoint() first.")
-            
+
         return self.predictor.predict_batch(smiles_list)
-    
-    def forward(self, input_ids: torch.Tensor, **kwargs) -> Dict[str, Any]:
+
+    def forward(self, input_ids: torch.Tensor, **kwargs) -> dict[str, Any]:
         """
         Forward pass for Hugging Face compatibility.
-        
+
         This method is required by PreTrainedModel but not used directly.
         Use predict() method instead.
         """
@@ -148,10 +146,10 @@ def register_fukui_net():
     """Register FukuiNet model classes with transformers AutoModel."""
     try:
         from transformers import AutoConfig, AutoModel
-        
+
         AutoConfig.register("fukui_net", FukuiNetConfig)
         AutoModel.register(FukuiNetConfig, FukuiNetForMolecularProperty)
-        
+
         logger.info("Successfully registered FukuiNet with transformers AutoModel")
         return True
     except Exception as e:
