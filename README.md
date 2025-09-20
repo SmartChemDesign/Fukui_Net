@@ -1,3 +1,19 @@
+---
+license: mit
+language:
+- en
+tags:
+- chemistry
+- biology
+- DFT
+- molecular-property-prediction
+- graph-neural-networks
+- fukui-indices
+- reactivity
+- pytorch
+library_name: transformers
+---
+
 # Fukui_Net
 
 Neural network for predicting Fukui indices using Kernel-based Attention Networks (KAN) with Chebyshev graph convolutions.
@@ -6,39 +22,33 @@ Neural network for predicting Fukui indices using Kernel-based Attention Network
 
 ```bash
 # Clone and install
-git clone <repository-url>
-cd Fukui_Net
+git clone https://huggingface.co/Nikolenko-Sergei/FukuiNet
+cd FukuiNet
 uv sync
 ```
 
 ## Usage
 
-### Device Information
+### CLI Interface
 
-Check available devices and model status:
+The CLI provides a simple interface for molecular analysis:
 
 ```bash
+# Check available devices and model info
 uv run fukui_net info
-```
 
-### Single Molecule Prediction
-
-```bash
-# Using CPU
-uv run fukui_net predict "CCO" --device cpu
-
-# Using GPU
+# Predict single molecule
 uv run fukui_net predict "CCO" --device cuda:1
+
+# Batch prediction from CSV file
+uv run fukui_net predict --csv molecules.csv --output predictions.csv --device cuda:1
 ```
 
-### Batch Prediction
-
-```bash
-uv run fukui_net predict \
-    --csv molecules.csv \
-    --output predictions.csv \
-    --device cuda:1
-```
+**CLI Options:**
+- `--device`: Specify device (cpu, cuda:0, cuda:1, etc.)
+- `--csv`: Input CSV file with SMILES column
+- `--output`: Output CSV file for batch predictions
+- `--column`: Name of SMILES column in CSV (default: "smiles")
 
 **Input CSV format:**
 ```csv
@@ -50,41 +60,56 @@ c1ccccc1,Benzene
 **Output CSV format:**
 ```csv
 smiles,fukui_indices
-CCO,"[0.123, -0.045, 0.234, ...]"
-c1ccccc1,"[-0.089, 0.156, ...]"
+CCO,"[-0.322, -0.122, -0.935, ...]"
+c1ccccc1,"[-0.280, -0.280, ...]"
+```
+
+### Python API
+
+```python
+from transformers import AutoModel
+
+# Load model from Hugging Face Hub
+model = AutoModel.from_pretrained(
+    "Nikolenko-Sergei/FukuiNet",
+    trust_remote_code=True
+)
+
+# Predict Fukui indices
+fukui_indices = model.predict("CCO")
+print(f"Fukui indices: {fukui_indices}")
+
+# Batch prediction
+results = model.predict_batch(["CCO", "c1ccccc1"])
+```
+
+### Direct Usage
+
+```python
+from fukui_net.predictor import FukuiNetPredictor
+
+# Load predictor
+predictor = FukuiNetPredictor("models/final_model.ckpt", device="cuda:1")
+
+# Predict
+fukui_indices = predictor.predict_smiles("CCO")
 ```
 
 ## Model Architecture
 
-- **Graph Neural Network**: Processes molecular structure as graphs
-- **Kernel-based Attention Networks (KAN)**: Advanced attention mechanisms
-- **Chebyshev Convolutions**: Efficient graph convolution operations
+- **Graph Neural Network**: Molecular structure as graphs
+- **Kernel-based Attention Networks (KAN)**: Advanced attention mechanisms  
+- **Chebyshev Convolutions**: Efficient graph operations
 - **RDKit Integration**: Molecular featurization
 
+## Input/Output Format
 
-## Hugging Face Hub
+**Input**: SMILES strings (e.g., "CCO", "c1ccccc1")
 
-This model is available on Hugging Face Hub: [Nikolenko-Sergei/FukuiNet](https://huggingface.co/Nikolenko-Sergei/FukuiNet)
-
-### Using from Hugging Face
-
-```bash
-# Clone from Hugging Face
-git clone https://huggingface.co/Nikolenko-Sergei/FukuiNet
-cd FukuiNet
-
-# Install and run
-uv sync
-uv run fukui_net predict "CCO"
-```
-
-### Uploading Updates
-
-To upload new versions to Hugging Face:
-
-1. Get your token from https://huggingface.co/settings/tokens
-2. Set environment variable: `export HUGGINGFACE_HUB_TOKEN='your_token'`
-3. Run upload script: `uv run python upload_to_hf.py`
+**Output**: List of Fukui indices for each atom
+- Positive values: Electrophilic sites
+- Negative values: Nucleophilic sites
+- Magnitude: Reactivity strength
 
 ## License
 

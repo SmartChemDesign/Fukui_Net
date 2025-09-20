@@ -1,7 +1,13 @@
 """
-Fukui_Net: A neural network for predicting Fukui indices in molecular systems.
-
-This package contains the model architecture and utilities for training and inference
-of Fukui indices using Kernel-based Attention Networks (KAN) with Chebyshev graph convolutions.
+FukuiNet: Neural Network for Predicting Fukui Indices
 """
 
+from fukui_net.predictor import FukuiNetPredictor
+from fukui_net.hf_integration import FukuiNetConfig, FukuiNetForMolecularProperty
+
+__version__ = "0.1.0"
+__all__ = [
+    "FukuiNetPredictor",
+    "FukuiNetConfig", 
+    "FukuiNetForMolecularProperty"
+]
