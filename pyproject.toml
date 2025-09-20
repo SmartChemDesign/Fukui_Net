@@ -4,6 +4,23 @@ version = "0.1.0"
 description = "A neural network for predicting Fukui indices using Kernel-based Attention Networks (KAN) with Chebyshev graph convolutions"
 readme = "README.md"
 requires-python = ">=3.11"
+authors = [
+    {name = "Sergei Nikolenko", email = "sergei.nikolenko@gmail.com"},
+]
+license = {text = "MIT"}
+keywords = ["chemistry", "biology", "DFT", "molecular-property-prediction", "graph-neural-networks", "fukui-indices", "reactivity", "pytorch"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Scientific/Engineering :: Chemistry",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+project-urls = { Homepage = "https://github.com/SergeiNikolenko/Fukui_Net", Repository = "https://github.com/SergeiNikolenko/Fukui_Net", Documentation = "https://github.com/SergeiNikolenko/Fukui_Net#readme", "Hugging Face" = "https://huggingface.co/Nikolenko-Sergei/FukuiNet" }
 dependencies = [
     "huggingface-hub[cli]>=0.35.0",
     "joblib>=1.5.2",
@@ -11,7 +28,7 @@ dependencies = [
     "lion-pytorch>=0.2.3",
     "numpy<2.0",
     "pandas>=2.3.2",
-    "rdkit-pypi>=2022.9.5",
+    "rdkit>=2022.9.5",
     "rich>=14.1.0",
     "scikit-learn>=1.7.2",
     "torch>=2.8.0",
@@ -77,6 +94,8 @@ markers = [
 
 [dependency-groups]
 dev = [
+    "build>=1.3.0",
     "pytest>=8.4.2",
     "ruff>=0.13.1",
+    "twine>=6.2.0",
 ]
