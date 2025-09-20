@@ -89,3 +89,4 @@ class TestCLI:
         )
         assert result.returncode == 1
         assert "--output is required when using --csv" in result.stdout
+

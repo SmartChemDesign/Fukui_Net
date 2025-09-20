@@ -5,6 +5,7 @@ description = "A neural network for predicting Fukui indices using Kernel-based 
 readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [
+    "huggingface-hub>=0.35.0",
     "joblib>=1.5.2",
     "lightning>=2.5.5",
     "lion-pytorch>=0.2.3",

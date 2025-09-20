@@ -96,3 +96,4 @@ class TestFukuiNetPredictor:
         """Test prediction with empty batch."""
         predictions = predictor.predict_batch([])
         assert predictions == []
+

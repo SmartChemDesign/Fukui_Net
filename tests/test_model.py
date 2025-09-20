@@ -131,3 +131,4 @@ class TestDataProcessing:
             features = atom_features(atom, params)
             assert len(features) == params.atom_fdim
             assert all(isinstance(f, (int, float, bool)) for f in features)
+

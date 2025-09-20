@@ -279,3 +279,4 @@ def convert_string_to_list(string):
         return ast.literal_eval(string)
     except ValueError:
         return []
+
