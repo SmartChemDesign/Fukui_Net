@@ -1,3 +1,10 @@
+[![PyPI version](https://img.shields.io/pypi/v/fukui-net.svg)](https://pypi.org/project/fukui-net/)
+[![Python versions](https://img.shields.io/pypi/pyversions/fukui-net.svg)](https://pypi.org/project/fukui-net/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
+[![HuggingFace model](https://img.shields.io/badge/HuggingFace-FukuiNet-orange.svg)](https://huggingface.co/Nikolenko-Sergei/FukuiNet)
+[![Built with PyTorch](https://img.shields.io/badge/framework-PyTorch-red.svg)](https://pytorch.org/)
+
+
 ---
 license: mit
 language:
