@@ -4,23 +4,6 @@
 [![HuggingFace model](https://img.shields.io/badge/HuggingFace-FukuiNet-orange.svg)](https://huggingface.co/Nikolenko-Sergei/FukuiNet)
 [![Built with PyTorch](https://img.shields.io/badge/framework-PyTorch-red.svg)](https://pytorch.org/)
 
-
----
-license: mit
-language:
-- en
-tags:
-- chemistry
-- biology
-- DFT
-- molecular-property-prediction
-- graph-neural-networks
-- fukui-indices
-- reactivity
-- pytorch
-library_name: transformers
----
-
 # Fukui_Net
 
 Neural network for predicting Fukui indices using Kernel-based Attention Networks (KAN) with Chebyshev graph convolutions.
